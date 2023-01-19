@@ -26,15 +26,18 @@ namespace Sprinkler
         SDSP::RBJ::highShelf(m_coeffs.target(0), sampleRate, 500.0, -3.0, 0.5);
         std::memcpy(m_coeffs.current(0), m_coeffs.target(0), sizeof(double) * 6);
         m_filters.setCoefficients(m_coeffs.current(0));
-
-        juce::dsp::ProcessSpec spec{ sampleRate, static_cast<juce::uint32>(samplesPerBlockExpected), 1 };
-        for (auto i = 0; i < m_delayLines.size(); i++) {
+        for (size_t i = 0; i < m_delayLines.size(); i++) {
             m_delayLines[i].prepare(samplesPerBlockExpected, sampleRate / 256);
             m_delayLines[i].setInterpolationRate(500);
             double currentMax;
             double scaledDelayTime{ 0 };
             if (i <= 29) {
-                scaledDelayTime = juce::jmap<double>(i, 0, 29, 0, 60);
+                //scaledDelayTime = juce::jmap<double>(i, 0, 29, 0, 60);
+                // log_1.1(y) + 29..
+                auto dtNorm = SDSP::KMath::log<float>(i == 0 ? 0.001 / 29.0f : i / 29.0f, 1.1f);
+                dtNorm += 40;
+                dtNorm = dtNorm < 0 ? 0 : dtNorm;
+                scaledDelayTime = juce::jmap<float>(dtNorm, 0, 40, 0, 60);
             }
             else {
                 scaledDelayTime = 0;
