@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="osQlSq" name="Sprinkler" projectType="audioplug" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" cppLanguageStandard="20">
+              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" cppLanguageStandard="20"
+              displaySplashScreen="1">
   <MAINGROUP id="RaX5AB" name="Sprinkler">
+    <GROUP id="{8BF8476A-7C1E-4528-6153-08C9C9D05640}" name="Resources">
+      <FILE id="b3Q08L" name="NotoSansJP-Regular.otf" compile="0" resource="1"
+            file="Resources/NotoSansJP-Regular.otf"/>
+    </GROUP>
     <GROUP id="{345C4209-BDAA-BF38-3238-836454701B47}" name="Source">
+      <GROUP id="{3DFA7603-097A-16B3-FCFD-675832FF8822}" name="UI">
+        <FILE id="NXdI0f" name="LF.cpp" compile="1" resource="0" file="Source/UI/LF.cpp"/>
+        <FILE id="kpdXtJ" name="LF.h" compile="0" resource="0" file="Source/UI/LF.h"/>
+      </GROUP>
       <GROUP id="{0CAD4607-0D95-DF38-070D-56AD8BAF15D9}" name="Audio">
         <FILE id="cWJnzp" name="Diffuser.h" compile="0" resource="0" file="Source/Audio/Diffuser.h"/>
         <FILE id="Ne2dkX" name="FrequencyDelay.cpp" compile="1" resource="0"
@@ -43,10 +52,32 @@
         <MODULEPATH id="juce_graphics" path="../../../../../JUCENew/JUCE/modules"/>
         <MODULEPATH id="juce_gui_basics" path="../../../../../JUCENew/JUCE/modules"/>
         <MODULEPATH id="juce_gui_extra" path="../../../../../JUCENew/JUCE/modules"/>
-        <MODULEPATH id="SDSP" path="../../../../../Program Files/JUCE/UserModules"/>
         <MODULEPATH id="juce_dsp" path="../../../../../JUCENew/JUCE/modules"/>
+        <MODULEPATH id="SDSP" path="Modules"/>
       </MODULEPATHS>
     </VS2022>
+    <XCODE_MAC targetFolder="Builds/MacOSX">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" headerPath="../../Source"/>
+        <CONFIGURATION isDebug="0" name="Release" headerPath="../../Source"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_audio_basics" path="../../juce"/>
+        <MODULEPATH id="juce_audio_devices" path="../../juce"/>
+        <MODULEPATH id="juce_audio_formats" path="../../juce"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="../../juce"/>
+        <MODULEPATH id="juce_audio_processors" path="../../juce"/>
+        <MODULEPATH id="juce_audio_utils" path="../../juce"/>
+        <MODULEPATH id="juce_core" path="../../juce"/>
+        <MODULEPATH id="juce_data_structures" path="../../juce"/>
+        <MODULEPATH id="juce_dsp" path="../../juce"/>
+        <MODULEPATH id="juce_events" path="../../juce"/>
+        <MODULEPATH id="juce_graphics" path="../../juce"/>
+        <MODULEPATH id="juce_gui_basics" path="../../juce"/>
+        <MODULEPATH id="juce_gui_extra" path="../../juce"/>
+        <MODULEPATH id="SDSP" path="../../juce"/>
+      </MODULEPATHS>
+    </XCODE_MAC>
   </EXPORTFORMATS>
   <MODULES>
     <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
@@ -63,6 +94,6 @@
     <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
-    <MODULE id="SDSP" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="SDSP" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
   </MODULES>
 </JUCERPROJECT>

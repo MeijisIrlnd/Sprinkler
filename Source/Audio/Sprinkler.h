@@ -42,7 +42,7 @@ namespace Sprinkler
         std::array<float, 8> m_samples, m_earlyReflections, m_temp, m_prev;
         std::array<Diffuser<8>, 4> m_diffusers;
         std::array<FrequencyDelay, 8> m_frequencyDelays;
-        std::array<juce::dsp::DelayLine<float, juce::dsp::DelayLineInterpolationTypes::Lagrange3rd>, 8> m_delayLines;
+        std::array<SDSP::CircularBuffer<float>, 8> m_delayLines;
         const float m_speedOfSound{ 343.0f };
         std::array<float, 8> m_delayTimes{
             (100 / m_speedOfSound) * std::powf(2, 1 / 8.0f),

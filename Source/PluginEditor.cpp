@@ -15,7 +15,8 @@ SprinklerAudioProcessorEditor::SprinklerAudioProcessorEditor (SprinklerAudioProc
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
-    setSize (400, 400);
+    setSize (300, 400);
+    setLookAndFeel(&m_lf);
     instantiateSlider(m_roomSizeSlider, tree, "RoomSize");
     instantiateSlider(m_reverbAmountContainer, tree, "ReverbAmount");
     instantiateSlider(m_sprinkleTimeContainer, tree, "SprinkleTime");
@@ -23,6 +24,7 @@ SprinklerAudioProcessorEditor::SprinklerAudioProcessorEditor (SprinklerAudioProc
 
 SprinklerAudioProcessorEditor::~SprinklerAudioProcessorEditor()
 {
+    setLookAndFeel(nullptr);
 }
 
 //==============================================================================
@@ -30,6 +32,21 @@ void SprinklerAudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
+    std::stringstream text;
+    text << "副作用は次のとおりです。\n";
+    text << "吐き気!!\n";
+    text << "リンパ節の腫れ!!\n";
+    text << "(頻脈)!!\n";
+    text << "小さな肺？\n";
+    text << "私は盲目です！\n";
+    text << "水の問題！\n";
+    text << "胸痛！\n";
+    text << "夜の悲しみ！\n";
+    text << "関節炎！\n";
+    text << "空気の質が息苦しくなる！";
+    g.setColour(juce::Colour(0x237f7f7f));
+    g.setFont(juce::Font(juce::Typeface::createSystemTypefaceFor(BinaryData::NotoSansJPRegular_otf, BinaryData::NotoSansJPRegular_otfSize)).withHeight(getHeight() / 16));
+    g.drawFittedText(text.str(), getBounds(), juce::Justification::centred, 13);
 }
 
 void SprinklerAudioProcessorEditor::resized()

@@ -27,7 +27,7 @@ namespace Sprinkler
         ~Diffuser() { }
         void prepareToPlay(int samplesPerBlockExpected, double sampleRate) 
         {
-            juce::dsp::ProcessSpec spec{ sampleRate, samplesPerBlockExpected, 1 };
+            juce::dsp::ProcessSpec spec{ sampleRate, static_cast<juce::uint32>(samplesPerBlockExpected), 1 };
             for (auto i = 0; i < m_delayLines.size(); i++) {
                 m_delayLines[i].prepare(spec);
                 m_delayLines[i].setMaximumDelayInSamples(static_cast<int>((m_diffuserDelayLineTimes[i] / 1000.0f) * sampleRate) + 1);

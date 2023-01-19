@@ -25,11 +25,13 @@ namespace Sprinkler
 
         void prepareToPlay(int samplesPerBlockExpected, double sampleRate);
         float processSample(const int bufferSize, float x);
-        void getNextAudioBlock(juce::AudioBuffer<float>& buffer);
         void releaseResources();
 
         void setHighestBinDelayTime(float delayTimeSeconds);
+        void setFilterCF(float newCF);
+        void setFilterGain(float newGainDB);
     private: 
+        void interpolateCoeffs();
         void stftCallback(float* data, size_t size);
         double m_sampleRate;
         int m_currentlyProcessingChannel{ 0 };
@@ -52,12 +54,21 @@ namespace Sprinkler
             }
         };
         // 256 fucking delay lines LOL 
-        std::vector<std::array<SDSP::CircularBuffer<STFTPair>, 2> > m_delayLines;
-        std::array<STFTPair, 2> m_prev;
+        std::vector<SDSP::CircularBuffer<STFTPair> > m_delayLines;
+        STFTPair m_prev;
         float m_feedback{ 0.0f };
         std::vector<float> m_accumulator, m_data;
         bool m_hasPerformedFirstTransform{ false };
         int m_samplesUntilUpdate{ 0 };
         int m_writePos{ 0 };
+        SDSP::SmoothedFilterCoefficients<1> m_coeffs;
+        SDSP::BiquadCascade<1> m_filters;
+
+        struct FilterUpdateParams { 
+            const int updateRate{100};
+            int samplesUntilUpdate{0};
+        } m_filterUpdateParams;
+
+        float m_filterCF{500.0f}, m_filterGain{-6.0f};
     };
 }

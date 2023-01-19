@@ -1,0 +1,3 @@
+[submodule "Modules/SDSP"]
+	path = Modules/SDSP
+	url = https://github.com/MeijisIrlnd/SDSP.git
