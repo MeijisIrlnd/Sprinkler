@@ -31,7 +31,10 @@ JUCE_WEB_BROWSER=0
 JUCE_USE_CURL=0
 JUCE_VST3_CAN_REPLACE_VST2=0)
 
-juce_add_binary_data(SprinklerData SOURCES Resources/NotoSansJP-Regular.otf)
+juce_add_binary_data(SprinklerData SOURCES
+ Resources/NotoSansJP-Regular.otf
+ Resources/SprinklerSliderDark.png
+)
 target_link_libraries(Sprinkler PRIVATE 
 SprinklerData
 juce::juce_audio_utils 

@@ -20,6 +20,9 @@ SprinklerAudioProcessorEditor::SprinklerAudioProcessorEditor (SprinklerAudioProc
     instantiateSlider(m_roomSizeSlider, tree, "RoomSize");
     instantiateSlider(m_reverbAmountContainer, tree, "ReverbAmount");
     instantiateSlider(m_sprinkleTimeContainer, tree, "SprinkleTime");
+    instantiateSlider(m_sprinkleFeedbackContainer, tree, "SprinkleFeedback");
+    instantiateSlider(m_dampeningFreqContainer, tree, "DampeningFrequency");
+    instantiateSlider(m_dampeningGainContainer, tree, "DampeningGain");
 }
 
 SprinklerAudioProcessorEditor::~SprinklerAudioProcessorEditor()
@@ -54,6 +57,10 @@ void SprinklerAudioProcessorEditor::resized()
     m_roomSizeSlider.slider.setBounds(0, 0, getWidth() / 4, getWidth() / 4);
     m_reverbAmountContainer.slider.setBounds(getWidth() / 4, 0, getWidth() / 4, getWidth() / 4);
     m_sprinkleTimeContainer.slider.setBounds(getWidth() / 2, 0, getWidth() / 4, getWidth() / 4);
+    m_sprinkleFeedbackContainer.slider.setBounds(0, getWidth() / 4, getWidth() / 4, getWidth() / 4);
+    m_dampeningFreqContainer.slider.setBounds(getWidth() / 4, getWidth() / 4, getWidth() / 4, getWidth() / 4); 
+    m_dampeningGainContainer.slider.setBounds(getWidth() / 2, getWidth() / 4, getWidth() / 4, getWidth() / 4);
+
 }
 
 void SprinklerAudioProcessorEditor::instantiateSlider(SliderContainer& container, APVTS& tree, const juce::String& paramName)
@@ -61,8 +68,7 @@ void SprinklerAudioProcessorEditor::instantiateSlider(SliderContainer& container
     auto param = tree.getParameter(paramName);
     container.label.setText(param->getName(100), juce::dontSendNotification);
     container.slider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
-    container.slider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 30, 20);
-    container.label.attachToComponent(&container.slider, false);
+    container.slider.setTextBoxStyle(juce::Slider::NoTextBox, true, 0, 0);
     addAndMakeVisible(&container.slider);
     container.attachment.reset(new juce::SliderParameterAttachment(*param, container.slider, nullptr));
 }

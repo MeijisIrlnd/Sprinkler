@@ -23,9 +23,6 @@ namespace Sprinkler
     void FrequencyDelay::prepareToPlay(int samplesPerBlockExpected, double sampleRate)
     {
         m_sampleRate = sampleRate;
-        SDSP::RBJ::highShelf(m_coeffs.target(0), sampleRate, 500.0, -3.0, 0.5);
-        std::memcpy(m_coeffs.current(0), m_coeffs.target(0), sizeof(double) * 6);
-        m_filters.setCoefficients(m_coeffs.current(0));
         for (size_t i = 0; i < m_delayLines.size(); i++) {
             m_delayLines[i].prepare(samplesPerBlockExpected, sampleRate / 256);
             m_delayLines[i].setInterpolationRate(500);
@@ -47,11 +44,14 @@ namespace Sprinkler
             scaledDelayTime = static_cast<int>(scaledDelayTime * sampleRate / 256);
             m_delayLines[i].setDelay(scaledDelayTime);
         }
-        
+        m_smoothedFeedback.reset(sampleRate, 0.1);
+        m_smoothedFeedback.setCurrentAndTargetValue(m_feedback);
+        m_hasBeenPrepared = true;
     }
 
     float FrequencyDelay::processSample(const int bufferSize, float x)
     {
+        
         if (m_data.size() != bufferSize) { 
             m_data.resize(bufferSize); 
             juce::FloatVectorOperations::fill(m_data.data(), 0.0f, bufferSize); 
@@ -60,11 +60,7 @@ namespace Sprinkler
             m_accumulator.resize(bufferSize); 
             juce::FloatVectorOperations::fill(m_accumulator.data(), 0.0f, bufferSize);
         }
-        if(m_filterUpdateParams.samplesUntilUpdate == 0) { 
-            SDSP::RBJ::lowShelf(m_coeffs.target(0), m_sampleRate, m_filterCF, m_filterGain, 0.5f);
-            m_filterUpdateParams.samplesUntilUpdate = m_filterUpdateParams.samplesUntilUpdate;
-        }
-        interpolateCoeffs();
+
         if (!m_hasPerformedFirstTransform) { 
             m_samplesUntilUpdate = bufferSize;
             m_hasPerformedFirstTransform = true;
@@ -79,21 +75,14 @@ namespace Sprinkler
             }
         }
         m_accumulator[m_writePos] = x;
-        float out = m_filters.processSample(m_data[m_writePos]);
+        float out = m_data[m_writePos];
         ++m_writePos;
         --m_samplesUntilUpdate;
-        --m_filterUpdateParams.samplesUntilUpdate;
         return out;
     }
 
     void FrequencyDelay::releaseResources()
     {
-    }
-
-    void FrequencyDelay::interpolateCoeffs() 
-    { 
-        m_coeffs.interpolate();
-        m_filters.setCoefficients(m_coeffs.current(0));
     }
 
     void FrequencyDelay::setHighestBinDelayTime(float delayTimeSeconds)
@@ -108,12 +97,11 @@ namespace Sprinkler
         }
     }
 
-    void FrequencyDelay::setFilterCF(float newCf) { 
-
-    }
-
-    void FrequencyDelay::setFilterGain(float newGainDB) { 
-
+    void FrequencyDelay::setFeedback(float feedback) { 
+        m_feedback = feedback;
+        if(m_hasBeenPrepared) { 
+            m_smoothedFeedback.setTargetValue(feedback);
+        }
     }
 
     void FrequencyDelay::stftCallback(float* data, size_t size)

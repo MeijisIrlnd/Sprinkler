@@ -36,6 +36,7 @@ private:
         std::unique_ptr<juce::SliderParameterAttachment> attachment{ nullptr };
     };
     void instantiateSlider(SliderContainer& container, APVTS& tree, const juce::String& paramName);
-    SliderContainer m_roomSizeSlider, m_reverbAmountContainer, m_sprinkleTimeContainer;
+    SliderContainer m_roomSizeSlider, m_reverbAmountContainer, m_sprinkleTimeContainer, m_sprinkleFeedbackContainer,
+      m_dampeningFreqContainer, m_dampeningGainContainer;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SprinklerAudioProcessorEditor)
 };

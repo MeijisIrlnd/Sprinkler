@@ -178,6 +178,15 @@ void SprinklerAudioProcessor::parameterChanged(const juce::String& id, float val
     }
     else if (id == "SprinkleTime") {
         m_sprinkler.setSprinkleTime(value);
+    } 
+    else if(id == "SprinkleFeedback") { 
+        m_sprinkler.setSprinkleFeedback(value);
+    }
+    else if(id == "DampeningFrequency") { 
+        m_sprinkler.setDampeningFrequency(value);
+    }
+    else if(id == "DampeningGain") { 
+        m_sprinkler.setDampeningGain(value);
     }
 }
 
@@ -186,6 +195,10 @@ void SprinklerAudioProcessor::bindListeners()
     m_tree.addParameterListener("RoomSize", this);
     m_tree.addParameterListener("ReverbAmount", this);
     m_tree.addParameterListener("SprinkleTime", this);
+    m_tree.addParameterListener("SprinkleFeedback", this);
+    m_tree.addParameterListener("DampeningFrequency", this);
+    m_tree.addParameterListener("DampeningGain", this);
+
 }
 
 APVTS::ParameterLayout SprinklerAudioProcessor::generateLayout()
@@ -195,6 +208,9 @@ APVTS::ParameterLayout SprinklerAudioProcessor::generateLayout()
     layout.add(std::make_unique<FloatParam>(juce::ParameterID("RoomSize", 1), "Room Size", juce::NormalisableRange<float>(1, 100, 0.01), 7));
     layout.add(std::make_unique<FloatParam>(juce::ParameterID("ReverbAmount", 1), "Reverb Amount", juce::NormalisableRange<float>(0, 1, 0.01), 0.5));
     layout.add(std::make_unique<FloatParam>(juce::ParameterID("SprinkleTime", 1), "Sprinkle Time", juce::NormalisableRange<float>(0.1, 60, 0.01f), 10.0f));
+    layout.add(std::make_unique<FloatParam>(juce::ParameterID("SprinkleFeedback", 1), "Sprinkle Feedback", juce::NormalisableRange<float>(0.0f, 0.5f), 0.0f));
+    layout.add(std::make_unique<FloatParam>(juce::ParameterID("DampeningFrequency", 1), "Dampening Frequency", juce::NormalisableRange<float>(1000, 15000, 0.01f, 0.5f), 1000.0f));
+    layout.add(std::make_unique<FloatParam>(juce::ParameterID("DampeningGain", 1), "Dampening Gain", juce::NormalisableRange<float>(-12, 0, 0.01f), -1.5f));
     return layout;
 }
 
